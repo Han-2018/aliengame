@@ -10,15 +10,27 @@ class Bullet(Sprite):
         self.screen = screen
 
         # 在（0,0）位置创建一个表示子弹的矩形，再设置正确的位置
-        self.rect = pygame.Rect(0, 0, ai_settings.bullet_width,
-                                ai_settings.bullet_height)
+        #self.rect = pygame.Rect(0, 0, ai_settings.bullet_width,
+        #                       ai_settings.bullet_height)
+        self.image = pygame.image.load('images/bullet.png')
+        self.rect = self.image.get_rect()
         self.rect.centerx = ship.rect.centerx
         self.rect.top = ship.rect.top
 
+        self.rect_left = self.image.get_rect()
+        self.rect_left.centerx = ship.rect.centerx - 20
+        self.rect_left.top = ship.rect.top + 20
+
+        self.rect_right = self.image.get_rect()
+        self.rect_right.centerx = ship.rect.centerx + 20
+        self.rect_right.top = ship.rect.top + 20
+
         # 存储用小数表示的子弹位置
         self.y = float(self.rect.y)
+        self.y = float(self.rect_left.y)
+        self.y = float(self.rect_right.y)
 
-        self.color = ai_settings.bullet_color
+        #self.color = ai_settings.bullet_color
         self.speed_factor = ai_settings.bullet_speed_factor
 
     def update(self):
@@ -27,7 +39,12 @@ class Bullet(Sprite):
         self.y -= self.speed_factor
         # 更新表示子弹的rect的位置
         self.rect.y = self.y
+        self.rect_left.y = self.y
+        self.rect_right.y = self.y
 
     def draw_bullet(self):
         """在屏幕上绘制子弹"""
-        pygame.draw.rect(self.screen, self.color, self.rect)
+        #pygame.draw.rect(self.screen, self.color, self.rect)
+        self.screen.blit(self.image, self.rect)
+        self.screen.blit(self.image, self.rect_left)
+        self.screen.blit(self.image, self.rect_right)
